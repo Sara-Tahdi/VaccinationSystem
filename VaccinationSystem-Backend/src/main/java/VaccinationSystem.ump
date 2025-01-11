@@ -1,0 +1,92 @@
+namespace ca.vaccinationsystem.model;
+
+class AppUser {
+  userId;
+  username;
+  password;
+  email;
+  phoneNumber;
+  role;
+  Child childProfile;
+  Notification userNotifications;
+  0..1 -> * Child;
+  0..1 -> * Notification;
+  }
+
+class Child {
+  childId;
+  name;
+  int age;
+  contactInfo;
+  location;
+  HealthcareProvider childHealthcareProvider;
+  Vaccination childVaccinations;
+  VaccinationSchedule childVaccinationSchedule;
+  0..1 -> * Vaccination;
+  0..1 -> 1 VaccinationSchedule;
+  0..1 -> 1 HealthcareProvider;
+}
+
+class Vaccination {
+  vaccineId;
+  vaccineName;
+  DateTime administeredDate;
+  administeredLocation;
+  HealthcareProvider childhealthcareProvider;
+  additionalNotes;
+  Boolean isCompleted;
+  1 <- 0..* HealthcareProvider;
+}
+
+class VaccinationSchedule {
+  VaccineRecommendation recommendations;
+  DateTime lastUpdated;
+  * -> 1 VaccineRecommendation;
+}
+
+class VaccineRecommendation {
+  vaccineId;
+  vaccineName;
+  DateTime recommendedDate;
+  DateTime deadlineDate;
+  clinicLocation;
+  clinicContact;
+  vaccineDetails;
+  Clinic nearbyClinics;
+  Boolean isUrgent;
+  * -> 1 Clinic;
+}
+
+class Clinic {
+  clinicId;
+  name;
+  address;
+  contactNumber;
+  Vaccine availableVaccines;
+  pricingInfo;
+  * <- * Vaccine;
+}
+
+class Vaccine {
+  vaccineId;
+  name;
+  details;
+  DateTime recommendedAdministrationDate;
+   reasonsForPostp1ment;
+}
+
+class Notification {
+  notificationId;
+  message;
+  DateTime timestamp;
+  enum NotificationChannel {EMAIL, SMS};
+  NotificationChannel channel;
+  Boolean isAcknowledged;
+}
+
+class HealthcareProvider {
+  providerId;
+  name;
+  contactInfo;
+  location;
+}
